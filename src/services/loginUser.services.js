@@ -1,32 +1,23 @@
-import users from "../database/index";
+import users from "../database";
 import jwt from "jsonwebtoken";
 import * as bcrypt from "bcryptjs";
 
-const loginUserService = async ({ email, password }) => {
-  const user = users.find((user) => user.email === email);
+const loginUserServices = (email, password, res) => {
+  const user = users.find((element) => element.email === email);
 
   if (!user) {
-    throw new Error("Wrong email/password");
+    return res.status(401).json({ message: "Wrong email/password" });
   }
 
-  const passwordMatch = await bcrypt.compare(password, user.password);
+  const passwordMatch = bcrypt.compareSync(password, user.password);
 
   if (!passwordMatch) {
-    throw new Error("Wrong email/password");
+    return res.status(401).json({ message: "Wrong email/password" });
   }
 
-  const token = jwt.sign(
-    {
-      adm: user.adm,
-    },
-    "e89f5c212146679abbfce5ceba3e975e",
-    {
-      expiresIn: "24h",
-      subject: user.id,
-    }
-  );
+  const token = jwt.sign({ email: email }, "SECRET_KEY", { expiresIn: "24h" });
 
-  return token;
+  return res.status(200).json({ token });
 };
 
-export default loginUserService;
+export default loginUserServices;

@@ -1,16 +1,18 @@
 import users from "../database";
-import jwt_decode from "jwt-decode";
 
-const profileUserService = (token) => {
-  const decoded = jwt_decode(token);
+const listProfileServices = (email) => {
+  const profileUser = users.find((user) => user.email == email);
 
-  const user = users.find((elem) => elem.email === decoded.email);
+  const user = {
+    name: profileUser.name,
+    email: profileUser.email,
+    isAdm: profileUser.isAdm,
+    createdOn: profileUser.createdOn,
+    updatedOn: profileUser.updatedOn,
+    id: profileUser.id,
+  };
 
-  const userToDisplay = { ...user };
-
-  delete userToDisplay["password"];
-
-  return userToDisplay;
+  return user;
 };
 
-export default profileUserService;
+export default listProfileServices;
