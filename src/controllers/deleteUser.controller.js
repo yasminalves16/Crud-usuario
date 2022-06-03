@@ -1,11 +1,17 @@
 import deleteUserService from "../services/deleteUser.services";
+import jwt from "jsonwebtoken";
 
 const deleteUserController = (req, res) => {
-  const { id } = req.params;
+  let token = req.headers.authorization;
 
-  const deletedUser = deleteUserService(id);
+  token = token.split(" ")[1];
 
-  return res.status(200).json({ message: deletedUser });
+  jwt.verify(token, "SECRET_KEY", (error, decode) => {
+    const { email } = decode;
+    const deleteUser = deleteUserService(email, res);
+
+    return res.json(deleteUser);
+  });
 };
 
 export default deleteUserController;

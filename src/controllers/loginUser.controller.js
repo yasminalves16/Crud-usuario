@@ -1,14 +1,11 @@
 import loginUserService from "../services/loginUser.services";
 
-const loginUser = async (req, res) => {
-  try {
-    const token = await loginUserService(req.body);
-    return res.status(200).json({ token });
-  } catch (error) {
-    return res.status(400).json({
-      message: error.message,
-    });
-  }
+const LoginUserController = (req, res) => {
+  const { email, password } = req.body;
+
+  const userLogin = loginUserService(email, password, res);
+
+  return res.json(userLogin);
 };
 
-export default loginUser;
+export default loginUserontroller;

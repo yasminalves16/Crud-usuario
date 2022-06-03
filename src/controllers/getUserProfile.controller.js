@@ -1,11 +1,15 @@
 import getUserProfileService from "../services/getUserProfile.services";
 
 const getUserProfileController = (req, res) => {
-  const user = req.user;
+  let token = req.headers.authorization;
 
-  const userData = getUserProfileService(user.id);
+  token = token.split(" ")[1];
 
-  return res.status(200).json(userData);
+  jwt.verify(token, "SECRET_KEY", (error, decode) => {
+    const { email } = decode;
+    const userProfile = getUserProfileService(email);
+    return res.json(userProfile);
+  });
 };
 
 export default getUserProfileController;

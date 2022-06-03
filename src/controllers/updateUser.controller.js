@@ -1,16 +1,12 @@
-import updateUserService from "../services/updateUser.service";
+import updateUserService from "../services/updateUser.services";
 
 const updateUserController = (req, res) => {
   const { id } = req.params;
-  const newUser = req.body;
+  const { name, email } = req.body;
 
-  try {
-    const updatedUser = updateUserService(newUser, id);
+  const updateUser = updateUserService(id, name, email);
 
-    return res.status(200).json(updatedUser);
-  } catch (error) {
-    return res.status(401).json({ message: error.message });
-  }
+  return res.json(updateUser);
 };
 
 export default updateUserController;
