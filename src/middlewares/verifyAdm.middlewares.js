@@ -1,15 +1,26 @@
-import jwt_decode from "jwt-decode";
+import jwt from "jsonwebtoken";
+import users from "../database";
 
 const verifyAdm = (req, res, next) => {
-  const token = req.token;
+  let token = req.headers.authorization;
 
-  const decoded = jwt_decode(token);
-
-  if (!decoded.adm) {
-    return res.status(401).json({ message: "Unauthorized" });
+  if (!token) {
+    return res.status(401).json({ message: "Missing authorization headers" });
   }
 
-  next();
+  token = token.split(" ")[1];
+
+  jwt.verify(token, "SECRET_KEY", (error, decoded) => {
+    if (error) {
+      return res.status(401).json({ message: "Invalid Token" });
+    } else {
+      const { email } = decoded;
+      const actualUser = users.find((user) => user.email === email);
+      if (actualUser.isAdm === false)
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+    next();
+  });
 };
 
 export default verifyAdm;

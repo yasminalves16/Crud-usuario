@@ -1,6 +1,6 @@
 import loginUserService from "../services/loginUser.services";
 
-const LoginUserController = (req, res) => {
+const loginUserController = (req, res) => {
   const { email, password } = req.body;
 
   const userLogin = loginUserService(email, password, res);
@@ -8,4 +8,4 @@ const LoginUserController = (req, res) => {
   return res.json(userLogin);
 };
 
-export default loginUserontroller;
+export default loginUserController;
