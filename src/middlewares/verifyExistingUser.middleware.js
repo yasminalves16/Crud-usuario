@@ -1,17 +1,16 @@
-import users from "../database";
+import jwt_decode from "jwt-decode";
 
-const verifyExistingUser = (req, res, next) => {
-  const userId = req.params.id;
+const verifyUser = (req, res, next) => {
+  const token = req.token;
+  const { id } = req.params;
 
-  const userExists = users.find((user) => user.id === userId);
+  const decoded = jwt_decode(token);
 
-  if (!userExists) {
-    return res.status(404).json({
-      message: "Usuario não encontrado",
-    });
+  if (!decoded.adm && id !== decoded.id) {
+    return res.status(401).json({ message: "Missing admin permissions" });
   }
 
   next();
 };
 
-export default verifyExistingUser;
+export default verifyUser;
