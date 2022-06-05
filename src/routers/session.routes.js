@@ -6,6 +6,5 @@ import loginSchema from "../schemas/login.schema";
 const sessionRouter = Router();
 
 sessionRouter.post("", schemaValidation(loginSchema), userLoginController);
-// sessionRouter.post("", userLoginController);
 
 export default sessionRouter;
