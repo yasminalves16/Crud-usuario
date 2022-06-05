@@ -1,12 +1,13 @@
 import express from "express";
-import appRouter from "./routes/app.routes";
+import sessionRouter from "./routers/session.routes";
+import userRouter from "./routers/user.routes";
 
 const app = express();
-const port = 3000;
-
 app.use(express.json());
-app.use("/", appRouter);
 
-app.listen(port, console.log(`App rodando`));
+app.use("/users", userRouter);
+app.use("/login", sessionRouter);
+
+app.listen(3000);
 
 export default app;
