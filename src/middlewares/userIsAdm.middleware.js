@@ -1,7 +1,9 @@
 import users from "../database";
 
 const userIsAdmMiddleware = (req, res, next) => {
-  const user = users.find((element) => element.email === req.user.email);
+  const email = req.user.email;
+
+  const user = users.find((element) => element.email === email);
 
   if (!user.isAdm) {
     return res.status(401).json({
